@@ -16,6 +16,15 @@
 | הפעלה | לחיצה על הסימנייה בכל כניסה לתלם | אוטומטית |
 | עדכונים | אוטומטיים (מתוך GitHub Pages) | מחליפים את הקבצים ומרעננים |
 
+## בטלפון
+
+| | אנדרואיד | אייפון |
+|---|---|---|
+| הדרך הקלה (תוסף, אוטומטי) | Firefox ← התוסף מ-addons.mozilla.org | דפדפן Orion ← אותו תוסף מ-addons.mozilla.org |
+| בלי דפדפן חדש | סימנייה (הוראות בדף ההפצה) | סימנייה (הוראות בדף ההפצה) |
+
+גרסת Firefox של התוסף נבנית לקובץ `telem-plus-firefox.zip`, ומעלים אותה ל-[addons.mozilla.org](https://addons.mozilla.org/developers/).
+
 ## מבנה
 
 ```
@@ -25,16 +34,18 @@ extension/        התוסף, וגם המקור היחיד של הקוד
   popup.*         חלון ההגדרות של התוסף
 telem-plus.js     נוצר מ-extension/ על ידי build.mjs; זה הקובץ שהסימנייה טוענת
 index.html        דף ההפצה (GitHub Pages)
-build.mjs         בניית telem-plus.js
+build.mjs         בניית telem-plus.js ו-firefox-manifest.json
+package.sh        בונה הכול ואורז את telem-plus-extension.zip (כרום) ואת telem-plus-firefox.zip (Firefox)
 ```
 
 ## עדכון
 
 ```bash
 # עורכים את extension/theme.css או את extension/content.js, ואז:
-node build.mjs
-cd extension && zip -r ../telem-plus-extension.zip . -x '*.DS_Store' && cd ..
+# מעלים את המספר ב-extension/manifest.json (version), ואז:
+./package.sh
 git commit -am "..." && git push
+# ואת telem-plus-firefox.zip מעלים כגרסה חדשה ב-addons.mozilla.org
 ```
 
 משתמשי הסימנייה מקבלים את העדכון תוך שעה בערך (הסימנייה מבקשת גרסה חדשה פעם בשעה, ו-GitHub Pages שומר עותק למשך כעשר דקות).
