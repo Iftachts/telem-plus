@@ -143,7 +143,7 @@
     if (!header || $("#tg-tools", header)) return;
     const tools = el("div", { id: "tg-tools" });
     const isMac = /Mac/i.test(navigator.platform);
-    const k = el("button", { class: "tg-kbd-btn", type: "button", title: "חיפוש מהיר" },
+    const k = el("button", { class: "tg-kbd-btn", type: "button", title: "חיפוש מהיר", "aria-label": "חיפוש מהיר" },
       `${IC.search}<span>לאן הולכים?</span><span class="tg-kbd">${isMac ? "⌘" : "Ctrl"} K</span>`);
     k.addEventListener("click", openPalette);
     const clock = el("div", { id: "tg-clock" });
@@ -364,7 +364,8 @@
     $("input", p).value = "";
     renderPalette();
     p.classList.add("tg-open");
-    setTimeout(() => $("input", p).focus(), 10);
+    // On phones, don't pop the keyboard over the list; tapping the field opens it.
+    if (!window.matchMedia("(pointer: coarse)").matches) setTimeout(() => $("input", p).focus(), 10);
   }
   function closePalette() { $("#tg-palette")?.classList.remove("tg-open"); }
   window.__telemPlusOpen = () => (settings.enabled ? openPalette() : store.set({ enabled: true }));

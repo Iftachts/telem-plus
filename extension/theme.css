@@ -959,3 +959,108 @@ html.tg-on tlv-eps-protocol .send-div { animation: none !important; }
 @media (prefers-reduced-motion: reduce) {
   html.tg-on *, html.tg-on *::before, html.tg-on *::after { animation: none !important; transition: none !important; }
 }
+
+/* =========================================================
+   PHONES
+   ========================================================= */
+html.tg-on { -webkit-tap-highlight-color: transparent; }
+
+/* touch devices: no keyboard hints */
+@media (pointer: coarse) {
+  #tg-palette .tg-foot, .tg-kbd { display: none !important; }
+}
+
+@media (max-width: 640px) {
+  /* lighter background effects for phone GPUs */
+  html.tg-on body::before, html.tg-on body::after { animation: none; filter: blur(50px); }
+
+  html.tg-on .container,
+  html.tg-on tlv-root > .container { padding: 16px 12px calc(150px + env(safe-area-inset-bottom)) !important; }
+
+  /* header */
+  html.tg-on tlv-header { height: 58px !important; padding: 0 12px !important; gap: 8px; }
+  html.tg-on tlv-logo .circle-white { width: 50px !important; height: 36px !important; border-radius: 11px !important; }
+  html.tg-on tlv-logo .circle-white img { width: 42px !important; }
+  html.tg-on tlv-header .breadcrumbs-and-user-profile { gap: 6px; min-width: 0; }
+  html.tg-on tlv-breadcrumbs { min-width: 0; }
+  html.tg-on tlv-breadcrumbs .breadcrumb { padding: 6px 8px !important; max-width: 46vw; overflow: hidden; }
+  html.tg-on tlv-breadcrumbs .breadcrumb :is(div, span) { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 14px !important; }
+  html.tg-on tlv-user-profile .user-profile { padding: 3px !important; }
+  html.tg-on tlv-user-profile .name { display: none !important; }
+  #tg-tools { gap: 6px; }
+  .tg-kbd-btn { width: 38px; height: 38px; padding: 0; justify-content: center; }
+  .tg-kbd-btn span { display: none !important; }
+  .tg-iconbtn { width: 38px; height: 38px; }
+  #tg-clock { display: none; }
+
+  /* hero */
+  #tg-hero { padding: 24px 20px 20px; border-radius: 22px; margin: 4px 0 18px; }
+  #tg-hero .tg-eyebrow { font-size: 12.5px; }
+  #tg-hero h1 { font-size: 28px; }
+  #tg-hero .tg-sub { font-size: 15px; }
+  #tg-hero .tg-hero-cta { display: flex; justify-content: center; width: 100%; margin-top: 18px; padding: 14px 18px; }
+
+  /* tiles */
+  html.tg-on tlv-user-desktop .important-modules .content { grid-template-columns: 1fr; gap: 12px; margin-bottom: 24px !important; }
+  html.tg-on tlv-important-module a { min-height: 0; flex-direction: row !important; align-items: center !important; justify-content: flex-start !important; padding: 16px !important; }
+  html.tg-on tlv-important-module a img { position: static; width: 48px !important; height: 48px !important; padding: 10px; border-radius: 15px; }
+  html.tg-on tlv-important-module a::after { top: 50%; transform: translateY(-50%); inset-inline-end: 16px; width: 34px; height: 34px; }
+  html.tg-on tlv-important-module a:hover::after { transform: translate(-4px, -50%); }
+  html.tg-on tlv-important-module a span { font-size: 18px !important; }
+
+  /* counters → compact rows */
+  html.tg-on tlv-counters .counters-title { font-size: 18px !important; margin-bottom: 10px !important; }
+  html.tg-on tlv-counters .content { grid-template-columns: 1fr; gap: 10px; }
+  html.tg-on tlv-counters .counter {
+    min-height: 0; flex-direction: row !important; align-items: center !important;
+    padding: 14px 18px !important; gap: 12px; border-radius: 18px !important;
+  }
+  html.tg-on tlv-counters .counter .title { font-size: 14.5px !important; }
+  html.tg-on tlv-counters .counter .value { margin-inline-start: auto !important; }
+  html.tg-on tlv-counters .counter .value span,
+  html.tg-on tlv-counters .counter .value .tg-count { font-size: 34px !important; }
+
+  /* form */
+  html.tg-on tlv-eps-protocol form > div { gap: 12px; }
+  html.tg-on tlv-eps-protocol form > div > :is(.div-details, .button-toggle-div, .p-div) { padding: 48px 14px 14px !important; border-radius: 18px !important; }
+  html.tg-on tlv-eps-protocol form > div > :is(.div-details, .p-div)::before,
+  html.tg-on tlv-eps-protocol form > div > .button-toggle-div:nth-child(2)::before { top: 16px; inset-inline-start: 16px; font-size: 15px; }
+  html.tg-on tlv-eps-protocol form > div > :is(.div-details, .p-div, .button-toggle-div:nth-child(2))::after { top: 21px; inset-inline-end: 16px; width: 26px; }
+  html.tg-on tlv-eps-protocol form > div > .button-toggle-div:nth-child(3) { margin-top: -12px !important; }
+  html.tg-on tlv-eps-protocol .div-details:nth-child(1) { gap: 0 10px; }
+  html.tg-on tlv-eps-protocol .placement-details .w-100:not(:first-child) { flex-direction: column; }
+  html.tg-on tlv-eps-protocol .placement-details :is(.w-50, .w-40) { width: 100% !important; flex: 1 1 auto; }
+  html.tg-on tlv-eps-protocol .file-div mat-form-field { max-width: none; }
+
+  /* full-width segmented toggles with comfy touch targets */
+  html.tg-on .button-toggle-div .mat-button-toggle-group { display: flex !important; width: 100%; }
+  html.tg-on .button-toggle-div .mat-button-toggle { flex: 1 1 0; }
+  html.tg-on .mat-button-toggle .mat-button-toggle-label-content { line-height: 46px !important; padding: 0 10px !important; }
+  html.tg-on .mat-mdc-chip { height: 42px !important; }
+
+  /* 16px+ stops iOS from zooming into fields */
+  html.tg-on :is(.mdc-text-field__input, textarea.mat-mdc-input-element, .mat-mdc-select-value, .mat-mdc-select-min-line, #tg-palette input) { font-size: 16px !important; }
+  html.tg-on .mat-mdc-option { min-height: 48px !important; }
+
+  /* sticky action bar: progress on top, two equal buttons below */
+  html.tg-on tlv-eps-protocol .send-div {
+    bottom: calc(10px + env(safe-area-inset-bottom));
+    padding: 10px !important; gap: 8px; border-radius: 18px;
+  }
+  html.tg-on tlv-eps-protocol .send-div #tg-progress { flex: 1 0 100%; justify-content: center; margin: 0 !important; font-size: 13px; }
+  html.tg-on tlv-eps-protocol .send-div #tg-progress .tg-ring { width: 26px; height: 26px; }
+  html.tg-on button.send { flex: 1 1 0; min-width: 0 !important; height: 46px; padding: 0 10px !important; font-size: 15px !important; }
+
+  .tg-wordcount { flex-wrap: wrap; }
+
+  /* focus-writing mode: nearly full screen */
+  html.tg-on.tg-focus-write .tg-focus-target { inset: 10px 10px calc(78px + env(safe-area-inset-bottom)) !important; }
+  html.tg-on.tg-focus-write .tg-focus-target textarea { font-size: 17px !important; }
+  #tg-focus-bar { bottom: calc(14px + env(safe-area-inset-bottom)); }
+
+  /* palette as a top sheet */
+  #tg-palette { padding-top: 10px; }
+  #tg-palette .tg-pal { width: calc(100vw - 20px); border-radius: 18px; }
+  #tg-palette ul { max-height: 70vh; }
+  #tg-palette li.tg-item { padding: 13px 12px; }
+}
