@@ -105,6 +105,38 @@
   footer a { color: var(--muted); }
 
   @media (max-width: 760px) { .steps, .two { grid-template-columns: 1fr; } .install { padding: 24px; } }
+
+  /* device switch */
+  .mobile-only { display: none; }
+  body.is-mobile .mobile-only { display: block; }
+  body.is-mobile .desktop-only { display: none; }
+  .switch-view { margin-top: 18px; font-size: 14px; color: var(--muted); }
+  .switch-view button { all: unset; cursor: pointer; color: var(--a1); text-decoration: underline; text-underline-offset: 3px; }
+
+  .copy-btn {
+    all: unset; box-sizing: border-box; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%;
+    padding: 18px; border-radius: 18px; background: var(--grad); color: #fff;
+    font: 700 20px "Rubik", sans-serif;
+    box-shadow: 0 18px 40px -14px rgba(47,107,255,.9), inset 0 1px 0 rgba(255,255,255,.3);
+  }
+  .copy-btn.done { background: linear-gradient(135deg, #1fbf7a, #12b5a6); }
+  .copy-btn img { width: 30px; height: 30px; border-radius: 8px; }
+  .code-fallback { display: none; width: 100%; margin-top: 10px; min-height: 90px; border-radius: 12px; border: 1px solid var(--border); background: rgba(0,0,0,.3); color: var(--muted); font: 12px ui-monospace, monospace; direction: ltr; padding: 10px; }
+  .code-fallback.show { display: block; }
+
+  .tabs { display: flex; gap: 4px; padding: 4px; margin: 22px 0 6px; border-radius: 14px; background: rgba(255,255,255,.05); border: 1px solid var(--border); }
+  .tabs button { all: unset; flex: 1; text-align: center; cursor: pointer; padding: 10px; border-radius: 10px; color: var(--muted); font-weight: 600; font-size: 15px; }
+  .tabs button.on { background: var(--grad); color: #fff; }
+  .platform { display: none; text-align: start; }
+  .platform.on { display: block; }
+  .platform ol { margin: 10px 0 0; padding: 0; list-style: none; counter-reset: st; }
+  .platform li { counter-increment: st; position: relative; padding: 12px 46px 12px 0; border-bottom: 1px solid var(--border); font-size: 15.5px; }
+  .platform li:last-child { border-bottom: 0; }
+  .platform li::before { content: counter(st); position: absolute; right: 0; top: 10px; width: 30px; height: 30px; border-radius: 10px; display: grid; place-items: center; background: var(--grad); color: #fff; font: 700 14px "Rubik"; }
+  .platform li small { display: block; color: var(--muted); font-size: 13.5px; margin-top: 2px; }
+  .ui { display: inline-block; padding: 1px 8px; border-radius: 7px; background: rgba(255,255,255,.09); border: 1px solid var(--border); font-size: 14px; white-space: nowrap; }
+  .tip { margin-top: 14px; padding: 12px 14px; border-radius: 12px; background: rgba(255,197,61,.1); border: 1px solid rgba(255,197,61,.3); color: #ffe3a3; font-size: 14px; text-align: start; }
 </style>
 </head>
 <body>
@@ -116,11 +148,12 @@
   </nav>
 
   <section class="hero">
-    <div class="eyebrow">בלי התקנה · עובד בכרום וב-Edge</div>
+    <div class="eyebrow">בלי התקנה · במחשב ובטלפון</div>
     <h1>תלם, רק <span>הרבה יותר נעים.</span></h1>
     <p class="lead">סימנייה אחת שמלבישה על מערכת תלם ממשק חדש: מצב כהה, טופס דיווח מסודר בשלבים, מצב כתיבה ממוקדת וחיפוש מהיר. הנתונים והמערכת נשארים בדיוק אותו דבר.</p>
 
     <div class="install" id="install">
+      <div class="desktop-only">
       <div class="drag-zone">
         <a class="bm" id="bm" href="#" draggable="true" title="גררו אותי לסרגל הסימניות">
           <img src="extension/icons/icon128.png" alt="">תלם+
@@ -132,6 +165,41 @@
         <div class="step"><div class="n">1</div><h3>מציגים את סרגל הסימניות</h3><p>לוחצים <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd> (במק: <kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>).</p></div>
         <div class="step"><div class="n">2</div><h3>גוררים את "תלם+"</h3><p>מחזיקים את הכפתור הכחול ומשחררים אותו על הסרגל.</p></div>
         <div class="step"><div class="n">3</div><h3>נכנסים לתלם ולוחצים</h3><p>בכל כניסה לתלם לוחצים על הסימנייה, והממשק מתחלף.</p></div>
+      </div>
+      <div class="switch-view">מהטלפון? <button type="button" data-view="mobile">להוראות לטלפון</button></div>
+      </div>
+
+      <div class="mobile-only">
+        <button class="copy-btn" id="copy" type="button"><img src="extension/icons/icon128.png" alt=""><span>העתקת קוד הסימנייה</span></button>
+        <textarea class="code-fallback" id="code" readonly aria-label="קוד הסימנייה"></textarea>
+
+        <div class="tabs" role="tablist">
+          <button type="button" data-p="ios" role="tab">אייפון (Safari)</button>
+          <button type="button" data-p="android" role="tab">אנדרואיד (Chrome)</button>
+        </div>
+
+        <div class="platform" id="p-ios">
+          <ol>
+            <li>לוחצים על הכפתור הכחול למעלה כדי להעתיק את הקוד.</li>
+            <li>שומרים את הדף הזה כסימנייה: <span class="ui">שיתוף ⬆</span> ← <span class="ui">הוספת סימנייה</span> ← <span class="ui">שמירה</span>.</li>
+            <li>פותחים את הסימניות <span class="ui">📖</span> ← <span class="ui">עריכה</span> ← נוגעים בסימנייה החדשה.<small>משנים את השם ל"תלם+".</small></li>
+            <li>בשדה הכתובת: מוחקים הכול ומדביקים את הקוד ← <span class="ui">סיום</span>.</li>
+            <li>בתלם: <span class="ui">📖</span> ← <span class="ui">תלם+</span>. זהו.</li>
+          </ol>
+        </div>
+
+        <div class="platform" id="p-android">
+          <ol>
+            <li>לוחצים על הכפתור הכחול למעלה כדי להעתיק את הקוד.</li>
+            <li>שומרים את הדף הזה כסימנייה: <span class="ui">⋮</span> ← <span class="ui">☆</span>.</li>
+            <li>לוחצים <span class="ui">עריכה</span> בהודעה שקופצת למטה (או <span class="ui">⋮</span> ← <span class="ui">סימניות</span> ← <span class="ui">⋮</span> ליד הסימנייה ← <span class="ui">עריכה</span>).</li>
+            <li>שם: "תלם+". בכתובת: מוחקים הכול ומדביקים את הקוד. חוזרים אחורה כדי לשמור.</li>
+            <li>בתלם: מקלידים <b>תלם+</b> בשורת הכתובת ובוחרים את הסימנייה מההצעות.<small>לא ללחוץ Enter, כי אז זה יחפש בגוגל. צריך לגעת בהצעה עם הכוכב.</small></li>
+          </ol>
+        </div>
+
+        <div class="tip">💡 צריך להפעיל את הסימנייה בכל פעם שפותחים את תלם. בתוך המערכת, כשעוברים בין מסכים, העיצוב נשאר.</div>
+        <div class="switch-view">במחשב? <button type="button" data-view="desktop">להוראות למחשב</button></div>
       </div>
     </div>
   </section>
@@ -188,7 +256,7 @@
     <details><summary>צריך ללחוץ על הסימנייה בכל פעם?</summary><p>כן, בכל פעם שפותחים או מרעננים את תלם. בתוך המערכת, כשעוברים בין מסכים, העיצוב נשאר. מי שלא רוצה ללחוץ כל פעם יכול להתקין את התוסף.</p></details>
     <details><summary>איך חוזרים לעיצוב המקורי?</summary><p>מרעננים את הדף. אפשר גם <kbd>Ctrl</kbd>+<kbd>K</kbd> ← "כיבוי תלם+".</p></details>
     <details><summary>לחיצה שנייה על הסימנייה?</summary><p>פותחת את החיפוש המהיר.</p></details>
-    <details><summary>זה עובד בטלפון?</summary><p>לא. הכלי מיועד למחשב, בכרום או ב-Edge.</p></details>
+    <details><summary>זה עובד בטלפון?</summary><p>כן, באייפון (Safari) ובאנדרואיד (Chrome). ההתקנה שונה קצת: מעתיקים את הקוד ושומרים אותו כסימנייה. כשנכנסים לדף הזה מהטלפון מופיעות ההוראות המתאימות, וגם <a href="#install" data-view="mobile" style="color:inherit">כאן</a>. התוסף לכרום לא עובד בטלפון, אבל הסימנייה כן.</p></details>
     <details><summary>משהו נראה שבור</summary><p>תלם מתעדכן מדי פעם. מרעננים את הדף כדי לחזור למקור, ומדווחים ב-<a href="https://github.com/Iftachts/telem-plus/issues" target="_blank" rel="noopener" style="color:inherit">GitHub</a>.</p></details>
   </div>
 
@@ -211,6 +279,41 @@
     "document.head.appendChild(s)})()";
   const bm = document.getElementById("bm");
   bm.href = "javascript:" + encodeURIComponent(code);
+  const bookmarklet = bm.href;
+
+  // Phone or computer?
+  const ua = navigator.userAgent;
+  const isIOS = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const isAndroid = /Android/i.test(ua);
+  const setView = (v) => document.body.classList.toggle("is-mobile", v === "mobile");
+  setView(isIOS || isAndroid || matchMedia("(pointer: coarse)").matches ? "mobile" : "desktop");
+  document.querySelectorAll("[data-view]").forEach((b) => b.addEventListener("click", () => setView(b.dataset.view)));
+
+  // Platform tabs
+  const setPlatform = (p) => {
+    document.querySelectorAll(".tabs button").forEach((b) => b.classList.toggle("on", b.dataset.p === p));
+    document.querySelectorAll(".platform").forEach((el) => el.classList.toggle("on", el.id === "p-" + p));
+  };
+  setPlatform(isAndroid ? "android" : "ios");
+  document.querySelectorAll(".tabs button").forEach((b) => b.addEventListener("click", () => setPlatform(b.dataset.p)));
+
+  // Copy the bookmarklet code
+  const copyBtn = document.getElementById("copy");
+  const codeBox = document.getElementById("code");
+  codeBox.value = bookmarklet;
+  copyBtn.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(bookmarklet);
+      copyBtn.classList.add("done");
+      copyBtn.querySelector("span").textContent = "הועתק ✓ עכשיו לשלב 2";
+    } catch {
+      // Clipboard blocked: show the code so it can be copied by hand
+      codeBox.classList.add("show");
+      codeBox.focus(); codeBox.select();
+      copyBtn.querySelector("span").textContent = "סמנו את הקוד למטה והעתיקו";
+    }
+  });
+
   // On this page a click does nothing; the button is meant to be dragged.
   bm.addEventListener("click", (e) => {
     e.preventDefault();
