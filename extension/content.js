@@ -1,4 +1,4 @@
-/* טלם+ — content script
+/* תלם+ — content script
  * Purely visual: adds classes and a few helper elements next to the site's own.
  * It never fills fields, never clicks "save/send", never reads or stores report content.
  */
@@ -318,7 +318,7 @@
       })),
       { group: "מראה", label: settings.calm ? "הפעלת אנימציות" : "מצב רגוע (בלי אנימציות)", icon: IC.wave, keys: "אנימציה calm motion רגוע",
         run: () => { store.set({ calm: !settings.calm }); closePalette(); } },
-      { group: "מראה", label: "כיבוי טלם+ (חזרה לעיצוב המקורי)", icon: IC.power, keys: "off disable כיבוי מקורי",
+      { group: "מראה", label: "כיבוי תלם+ (חזרה לעיצוב המקורי)", icon: IC.power, keys: "off disable כיבוי מקורי",
         run: () => { store.set({ enabled: false }); closePalette(); } },
     );
     return items;
