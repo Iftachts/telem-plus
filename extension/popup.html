@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <title>טלם+</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <div class="logo">ט+</div>
+    <div>
+      <h1>טלם+</h1>
+      <p>ממשק חדש למערכת טלם</p>
+    </div>
+    <label class="switch" title="הפעלה / כיבוי">
+      <input type="checkbox" id="enabled">
+      <span></span>
+    </label>
+  </header>
+
+  <section>
+    <h2>מצב תצוגה</h2>
+    <div class="seg" id="theme">
+      <button data-v="light">בהיר</button>
+      <button data-v="auto">אוטומטי</button>
+      <button data-v="dark">כהה</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>ערכת צבע</h2>
+    <div class="swatches" id="accent">
+      <button data-v="sea" style="--a:#12b5a6;--b:#2f6bff" title="ים תיכון"><span>ים תיכון</span></button>
+      <button data-v="sunset" style="--a:#ff8a3d;--b:#f0437a" title="שקיעה בגורדון"><span>שקיעה</span></button>
+      <button data-v="citrus" style="--a:#f5b400;--b:#f06b1d" title="הדרים"><span>הדרים</span></button>
+      <button data-v="violet" style="--a:#7a5cff;--b:#d04cf0" title="סגול לילי"><span>סגול</span></button>
+    </div>
+  </section>
+
+  <section class="rows">
+    <label class="row"><span>כרטיס פתיחה בשולחן העבודה</span><input type="checkbox" id="hero"></label>
+    <label class="row"><span>מצב רגוע (בלי אנימציות)</span><input type="checkbox" id="calm"></label>
+  </section>
+
+  <footer>
+    <span class="kbd">Ctrl / ⌘ + K</span> חיפוש מהיר בתוך טלם
+  </footer>
+  <script src="popup.js"></script>
+</body>
+</html>

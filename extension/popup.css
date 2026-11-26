@@ -1,0 +1,66 @@
+:root {
+  --bg: #0f1220; --card: #181c2e; --border: rgba(255,255,255,.08);
+  --text: #eef0f7; --muted: #9aa1b8; --a: #12b5a6; --b: #2f6bff;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; width: 320px; padding: 16px;
+  font: 14px/1.4 "Heebo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(260px 160px at 90% -10%, rgba(18,181,166,.35), transparent 70%),
+    radial-gradient(220px 160px at 0% 0%, rgba(47,107,255,.3), transparent 70%),
+    var(--bg);
+}
+header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.logo {
+  width: 42px; height: 42px; border-radius: 13px; display: grid; place-items: center;
+  font: 800 18px system-ui; color: #fff; background: linear-gradient(135deg, var(--a), var(--b));
+  box-shadow: 0 8px 20px -8px var(--b);
+}
+h1 { margin: 0; font-size: 17px; }
+header p { margin: 0; color: var(--muted); font-size: 12.5px; }
+header > div:nth-child(2) { flex: 1; }
+h2 { margin: 0 0 8px; font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: .04em; }
+section { padding: 12px; margin-bottom: 10px; border-radius: 14px; background: var(--card); border: 1px solid var(--border); }
+
+.seg { display: flex; gap: 4px; padding: 4px; border-radius: 12px; background: rgba(255,255,255,.04); }
+.seg button {
+  flex: 1; border: 0; padding: 8px 0; border-radius: 9px; cursor: pointer;
+  background: transparent; color: var(--muted); font: 600 13px inherit; font-family: inherit;
+}
+.seg button.on { background: linear-gradient(135deg, var(--a), var(--b)); color: #fff; }
+
+.swatches { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.swatches button {
+  position: relative; height: 54px; border-radius: 12px; cursor: pointer;
+  border: 2px solid transparent; background: linear-gradient(135deg, var(--a), var(--b));
+  display: flex; align-items: flex-end; justify-content: center; padding: 0 0 5px;
+  transition: transform .15s;
+}
+.swatches button span { font: 600 10.5px inherit; font-family: inherit; color: rgba(255,255,255,.95); }
+.swatches button:hover { transform: translateY(-2px); }
+.swatches button.on { border-color: #fff; box-shadow: 0 0 0 3px rgba(255,255,255,.15); }
+
+.rows { padding: 4px 12px; }
+.row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; cursor: pointer; }
+.row + .row { border-top: 1px solid var(--border); }
+.row input { width: 18px; height: 18px; accent-color: var(--b); }
+
+.switch { position: relative; width: 44px; height: 26px; flex: 0 0 auto; }
+.switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+.switch span {
+  position: absolute; inset: 0; border-radius: 99px; cursor: pointer;
+  background: rgba(255,255,255,.14); transition: background .2s;
+}
+.switch span::after {
+  content: ""; position: absolute; top: 3px; right: 3px; width: 20px; height: 20px; border-radius: 50%;
+  background: #fff; transition: transform .2s;
+}
+.switch input:checked + span { background: linear-gradient(135deg, var(--a), var(--b)); }
+.switch input:checked + span::after { transform: translateX(-18px); }
+
+body.off section { opacity: .45; pointer-events: none; }
+footer { margin-top: 6px; text-align: center; color: var(--muted); font-size: 12px; }
+.kbd { display: inline-block; padding: 2px 6px; border-radius: 6px; border: 1px solid var(--border); background: rgba(255,255,255,.05); direction: ltr; font: 600 11px ui-monospace, monospace; margin-left: 4px; }

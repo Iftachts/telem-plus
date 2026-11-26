@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>טלם+ | ממשק חדש למערכת טלם</title>
+<meta name="description" content="סימנייה אחת שמלבישה על מערכת טלם ממשק חדש: מצב כהה, טופס דיווח מסודר, מצב כתיבה ממוקדת וחיפוש מהיר.">
+<link rel="icon" href="extension/icons/icon48.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&family=Rubik:wght@600;700;800&display=swap">
+<style>
+  :root {
+    --a1: #12b5a6; --a2: #2f6bff; --a3: #ff6b5a; --a4: #ffc53d;
+    --bg: #0b0e17; --card: rgba(24, 29, 46, .7); --border: rgba(255,255,255,.09);
+    --text: #eef0f7; --muted: #9aa1b8;
+    --grad: linear-gradient(135deg, var(--a1), var(--a2));
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; color: var(--text); background: var(--bg);
+    font: 17px/1.6 "Heebo", system-ui, sans-serif; -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: ""; position: fixed; inset: -20vmax; z-index: -1; pointer-events: none; filter: blur(70px); opacity: .55;
+    background:
+      radial-gradient(38vmax 38vmax at 85% 5%, rgba(18,181,166,.6), transparent 60%),
+      radial-gradient(30vmax 30vmax at 5% 35%, rgba(47,107,255,.45), transparent 60%),
+      radial-gradient(26vmax 26vmax at 70% 95%, rgba(255,107,90,.3), transparent 60%);
+    animation: drift 28s ease-in-out infinite alternate;
+  }
+  @keyframes drift { to { transform: translate3d(-4vmax, 3vmax, 0) rotate(8deg) scale(1.08); } }
+  @media (prefers-reduced-motion: reduce) { *, *::before { animation: none !important; } }
+
+  main { max-width: 1040px; margin: 0 auto; padding: 0 24px 80px; }
+  nav { display: flex; align-items: center; gap: 12px; padding: 22px 0; }
+  nav img { width: 38px; height: 38px; border-radius: 11px; }
+  nav b { font: 700 19px "Rubik", sans-serif; }
+  nav .tag { margin-inline-start: auto; font-size: 13px; color: var(--muted); border: 1px solid var(--border); border-radius: 99px; padding: 4px 12px; }
+
+  .hero { text-align: center; padding: 56px 0 30px; }
+  .eyebrow { display: inline-block; font-size: 14px; color: var(--a1); background: rgba(18,181,166,.12); border: 1px solid rgba(18,181,166,.3); border-radius: 99px; padding: 4px 14px; margin-bottom: 18px; }
+  h1 { font: 800 clamp(40px, 7vw, 76px)/1.02 "Rubik", sans-serif; margin: 0 0 18px; letter-spacing: -.02em; }
+  h1 span { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lead { font-size: clamp(17px, 2.2vw, 21px); color: var(--muted); max-width: 640px; margin: 0 auto; }
+
+  .install {
+    margin: 46px auto 0; max-width: 760px; padding: 34px; border-radius: 28px;
+    background: var(--card); border: 1px solid var(--border); backdrop-filter: blur(16px);
+    box-shadow: 0 40px 80px -40px rgba(0,0,0,.8);
+  }
+  .drag-zone { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .bm {
+    display: inline-flex; align-items: center; gap: 12px; padding: 18px 34px; border-radius: 18px;
+    background: var(--grad); color: #fff; text-decoration: none; cursor: grab;
+    font: 700 24px "Rubik", sans-serif; letter-spacing: .01em;
+    box-shadow: 0 18px 40px -14px rgba(47,107,255,.9), inset 0 1px 0 rgba(255,255,255,.3);
+    animation: bob 2.6s ease-in-out infinite;
+    user-select: none;
+  }
+  .bm img { width: 34px; height: 34px; border-radius: 9px; box-shadow: 0 4px 10px rgba(0,0,0,.25); }
+  .bm:active { cursor: grabbing; }
+  @keyframes bob { 50% { transform: translateY(-5px); } }
+  .drag-hint { font-size: 15px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+  .drag-hint b { color: var(--text); }
+  .nudge { min-height: 22px; font-size: 14px; color: var(--a4); }
+
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 30px; }
+  .step { padding: 18px; border-radius: 18px; background: rgba(255,255,255,.035); border: 1px solid var(--border); }
+  .step .n { width: 30px; height: 30px; border-radius: 10px; display: grid; place-items: center; background: var(--grad); font: 700 15px "Rubik"; margin-bottom: 10px; }
+  .step h3 { margin: 0 0 4px; font-size: 16px; }
+  .step p { margin: 0; font-size: 14.5px; color: var(--muted); }
+  kbd { font: 600 12.5px ui-monospace, monospace; padding: 2px 7px; border-radius: 6px; background: rgba(255,255,255,.08); border: 1px solid var(--border); direction: ltr; display: inline-block; color: var(--text); }
+
+  h2 { font: 700 30px "Rubik", sans-serif; margin: 90px 0 8px; text-align: center; }
+  .sub { text-align: center; color: var(--muted); margin: 0 0 30px; }
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .f { padding: 22px; border-radius: 22px; background: var(--card); border: 1px solid var(--border); position: relative; overflow: hidden; }
+  .f::after { content: ""; position: absolute; inset-inline-end: -50px; top: -50px; width: 130px; height: 130px; border-radius: 50%; background: var(--c, var(--a1)); opacity: .14; }
+  .f .ic { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; background: var(--c, var(--a1)); color: #fff; margin-bottom: 14px; }
+  .f .ic svg { width: 22px; height: 22px; }
+  .f h3 { margin: 0 0 6px; font-size: 18px; }
+  .f p { margin: 0; color: var(--muted); font-size: 15px; }
+
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .panel { padding: 26px; border-radius: 22px; background: var(--card); border: 1px solid var(--border); }
+  .panel h3 { margin: 0 0 12px; font-size: 19px; display: flex; align-items: center; gap: 10px; }
+  .panel ul { margin: 0; padding: 0 20px 0 0; color: var(--muted); }
+  .panel li { margin: 6px 0; }
+  .panel li b { color: var(--text); font-weight: 600; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; padding: 11px 18px; border-radius: 12px; text-decoration: none; color: var(--text); border: 1px solid rgba(255,255,255,.2); font-weight: 600; font-size: 15px; transition: background .2s; }
+  .btn:hover { background: rgba(255,255,255,.06); }
+  ol.ext { margin: 10px 0 0; padding: 0 20px 0 0; color: var(--muted); font-size: 15px; }
+  ol.ext li { margin: 5px 0; }
+
+  details { border-bottom: 1px solid var(--border); padding: 16px 4px; }
+  details summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+  details summary::after { content: "+"; color: var(--muted); font-size: 20px; line-height: 1; }
+  details[open] summary::after { content: "–"; }
+  details p { color: var(--muted); margin: 10px 0 0; }
+  .faq { max-width: 760px; margin: 0 auto; }
+
+  footer { margin-top: 80px; text-align: center; color: var(--muted); font-size: 13.5px; }
+  footer a { color: var(--muted); }
+
+  @media (max-width: 760px) { .steps, .two { grid-template-columns: 1fr; } .install { padding: 24px; } }
+</style>
+</head>
+<body>
+<main>
+  <nav>
+    <img src="extension/icons/icon128.png" alt="">
+    <b>טלם+</b>
+    <span class="tag">כלי קהילתי, לא רשמי</span>
+  </nav>
+
+  <section class="hero">
+    <div class="eyebrow">בלי התקנה · עובד בכרום וב-Edge</div>
+    <h1>טלם, רק <span>הרבה יותר נעים.</span></h1>
+    <p class="lead">סימנייה אחת שמלבישה על מערכת טלם ממשק חדש: מצב כהה, טופס דיווח מסודר בשלבים, מצב כתיבה ממוקדת וחיפוש מהיר. הנתונים והמערכת נשארים בדיוק אותו דבר.</p>
+
+    <div class="install" id="install">
+      <div class="drag-zone">
+        <a class="bm" id="bm" href="#" draggable="true" title="גררו אותי לסרגל הסימניות">
+          <img src="extension/icons/icon128.png" alt="">טלם+
+        </a>
+        <div class="drag-hint">⬆ <b>גררו</b> את הכפתור לסרגל הסימניות (לא ללחוץ)</div>
+        <div class="nudge" id="nudge" aria-live="polite"></div>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="n">1</div><h3>מציגים את סרגל הסימניות</h3><p>לוחצים <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd> (במק: <kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>).</p></div>
+        <div class="step"><div class="n">2</div><h3>גוררים את "טלם+"</h3><p>מחזיקים את הכפתור הכחול ומשחררים אותו על הסרגל.</p></div>
+        <div class="step"><div class="n">3</div><h3>נכנסים לטלם ולוחצים</h3><p>בכל כניסה לטלם לוחצים על הסימנייה, והממשק מתחלף.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <h2>מה מקבלים</h2>
+  <p class="sub">הכול על גבי המערכת הקיימת. כפתור אחד מחזיר את העיצוב המקורי.</p>
+  <div class="features">
+    <div class="f" style="--c:#2f6bff"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></div><h3>מצב כהה ובהיר</h3><p>עובר אוטומטית לפי הגדרות המחשב, או ידנית בכפתור. ויש ארבע ערכות צבע.</p></div>
+    <div class="f" style="--c:#12b5a6"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></div><h3>טופס דיווח בשלבים</h3><p>חמישה שלבים ממוספרים, טבעת התקדמות של שדות החובה, וסרגל שמירה שנשאר צמוד לתחתית המסך.</p></div>
+    <div class="f" style="--c:#c04cfd"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div><h3>מצב כתיבה ממוקדת</h3><p>"מהלך וסיכום פגישה" במסך מלא ושקט, עם מונה מילים. יוצאים עם <kbd>Esc</kbd>.</p></div>
+    <div class="f" style="--c:#ff6b5a"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div><h3>חיפוש מהיר</h3><p><kbd>Ctrl</kbd>+<kbd>K</kbd> פותח חלון לניווט בין עמודים ולהחלפת מצב תצוגה.</p></div>
+    <div class="f" style="--c:#f5a400"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></div><h3>שולחן עבודה חדש</h3><p>ברכה לפי השעה, תאריך עברי ולועזי, ומוני ההתערבויות ככרטיסים גדולים.</p></div>
+    <div class="f" style="--c:#ff4d5e"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></div><h3>מצב חירום בולט</h3><p>כשמסמנים "חרום" הטופס כולו מקבל הדגשה אדומה, כדי שלא יפספסו.</p></div>
+  </div>
+
+  <h2>בטיחות ופרטיות</h2>
+  <p class="sub">כלי שרץ בתוך מערכת עם מידע רגיש צריך להיות שקוף.</p>
+  <div class="two">
+    <div class="panel">
+      <h3>✅ מה הוא עושה</h3>
+      <ul>
+        <li><b>משנה רק את התצוגה</b>: צבעים, גופנים ופריסה.</li>
+        <li>מוסיף כפתורים <b>משלו</b>: חיפוש מהיר, מצב כהה, מצב כתיבה.</li>
+        <li>שומר בדפדפן שלכם רק את <b>העדפות התצוגה</b> (כהה/בהיר, צבע).</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>🚫 מה הוא לא עושה</h3>
+      <ul>
+        <li><b>לא</b> ממלא שדות ולא לוחץ על "שמירה" או "שליחה".</li>
+        <li><b>לא</b> קורא, שומר או שולח את תוכן הדיווחים או פרטי תלמידים.</li>
+        <li><b>לא</b> מתחבר לשום שרת חוץ מקובץ הקוד עצמו וגופנים מ-Google Fonts.</li>
+      </ul>
+      <a class="btn" href="https://github.com/Iftachts/telem-plus" target="_blank" rel="noopener">כל הקוד פתוח ב-GitHub ↗</a>
+    </div>
+  </div>
+
+  <h2>מעדיפים בלי ללחוץ כל פעם?</h2>
+  <p class="sub">אותו דבר בדיוק כתוסף לכרום או ל-Edge, שפועל אוטומטית בכל כניסה.</p>
+  <div class="panel" style="max-width:760px;margin:0 auto">
+    <h3>התקנה כתוסף</h3>
+    <ol class="ext">
+      <li>מורידים את הקובץ ומחלצים אותו לתיקייה קבועה.</li>
+      <li>נכנסים ל-<kbd>chrome://extensions</kbd> (או <kbd>edge://extensions</kbd>).</li>
+      <li>מדליקים "מצב מפתח" (Developer mode).</li>
+      <li>לוחצים "Load unpacked" ובוחרים את התיקייה <b>extension</b>.</li>
+    </ol>
+    <a class="btn" href="telem-plus-extension.zip" download>⬇ הורדת התוסף (zip)</a>
+  </div>
+
+  <h2>שאלות</h2>
+  <div class="faq">
+    <details><summary>לחצתי על הכפתור הכחול ולא קרה כלום</summary><p>זה בסדר. את הכפתור צריך <b>לגרור</b> לסרגל הסימניות, לא ללחוץ עליו. הסימנייה עובדת רק בתוך טלם.</p></details>
+    <details><summary>צריך ללחוץ על הסימנייה בכל פעם?</summary><p>כן, בכל פעם שפותחים או מרעננים את טלם. בתוך המערכת, כשעוברים בין מסכים, העיצוב נשאר. מי שלא רוצה ללחוץ כל פעם יכול להתקין את התוסף.</p></details>
+    <details><summary>איך חוזרים לעיצוב המקורי?</summary><p>מרעננים את הדף. אפשר גם <kbd>Ctrl</kbd>+<kbd>K</kbd> ← "כיבוי טלם+".</p></details>
+    <details><summary>לחיצה שנייה על הסימנייה?</summary><p>פותחת את החיפוש המהיר.</p></details>
+    <details><summary>זה עובד בטלפון?</summary><p>לא. הכלי מיועד למחשב, בכרום או ב-Edge.</p></details>
+    <details><summary>משהו נראה שבור</summary><p>טלם מתעדכן מדי פעם. מרעננים את הדף כדי לחזור למקור, ומדווחים ב-<a href="https://github.com/Iftachts/telem-plus/issues" target="_blank" rel="noopener" style="color:inherit">GitHub</a>.</p></details>
+  </div>
+
+  <footer>
+    טלם+ הוא כלי קהילתי ולא רשמי. הוא לא מטעם עיריית תל אביב-יפו ולא קשור לצוות הפיתוח של מערכת טלם.<br>
+    הקוד פתוח ב-<a href="https://github.com/Iftachts/telem-plus">GitHub</a>.
+  </footer>
+</main>
+
+<script>
+  // Build the bookmarklet from the address this page is served from, so forks work too.
+  const here = location.protocol === "file:" ? "https://iftachts.github.io/telem-plus/" : new URL(".", location.href).href;
+  const src = here + "telem-plus.js";
+  const code = "(function(){" +
+    "if(location.hostname!=='telem.tel-aviv.gov.il'){alert('טלם+ עובד רק בתוך מערכת טלם (telem.tel-aviv.gov.il)');return}" +
+    "if(window.__telemPlusOpen){window.__telemPlusOpen();return}" +
+    "var s=document.createElement('script');" +
+    "s.src='" + src + "?v='+Math.floor(Date.now()/36e5);" +
+    "s.onerror=function(){alert('טלם+ לא נטען. בדקו את החיבור לאינטרנט ונסו שוב.')};" +
+    "document.head.appendChild(s)})()";
+  const bm = document.getElementById("bm");
+  bm.href = "javascript:" + encodeURIComponent(code);
+  // On this page a click does nothing; the button is meant to be dragged.
+  bm.addEventListener("click", (e) => {
+    e.preventDefault();
+    document.getElementById("nudge").textContent = "לא ללחוץ, לגרור 🙂 מחזיקים את הכפתור ומשחררים אותו על סרגל הסימניות.";
+  });
+</script>
+</body>
+</html>
