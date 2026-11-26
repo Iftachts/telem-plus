@@ -268,7 +268,7 @@
 
 <script>
   // Build the bookmarklet from the address this page is served from, so forks work too.
-  const here = location.protocol === "file:" ? "https://iftachts.github.io/telem-plus/" : new URL(".", location.href).href;
+  const here = /^https?:$/.test(location.protocol) ? new URL(".", location.href).href : "https://iftachts.github.io/telem-plus/";
   const src = here + "telem-plus.js";
   const code = "(function(){" +
     "if(location.hostname!=='telem.tel-aviv.gov.il'){alert('תלם+ עובד רק בתוך מערכת תלם (telem.tel-aviv.gov.il)');return}" +
