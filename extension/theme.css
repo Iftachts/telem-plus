@@ -443,8 +443,8 @@ html.tg-on tlv-counters .counters-title {
 }
 html.tg-on tlv-counters .content {
   display: grid !important;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+  gap: 18px !important;
   background: transparent !important;
   padding: 0 !important; margin: 0 !important; width: 100% !important;
 }
@@ -1007,10 +1007,11 @@ html.tg-on { -webkit-tap-highlight-color: transparent; }
   html.tg-on tlv-important-module a::after { top: 50%; transform: translateY(-50%); inset-inline-end: 16px; width: 34px; height: 34px; }
   html.tg-on tlv-important-module a:hover::after { transform: translate(-4px, -50%); }
   html.tg-on tlv-important-module a span { font-size: 18px !important; }
+  html.tg-on tlv-important-module a::before { display: none; }
 
   /* counters → compact rows */
   html.tg-on tlv-counters .counters-title { font-size: 18px !important; margin-bottom: 10px !important; }
-  html.tg-on tlv-counters .content { grid-template-columns: 1fr; gap: 10px; }
+  html.tg-on tlv-counters .content { grid-template-columns: 1fr !important; gap: 10px !important; }
   html.tg-on tlv-counters .counter {
     min-height: 0; flex-direction: row !important; align-items: center !important;
     padding: 14px 18px !important; gap: 12px; border-radius: 18px !important;
