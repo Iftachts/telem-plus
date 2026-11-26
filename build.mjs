@@ -28,3 +28,17 @@ ${content}
 `;
 writeFileSync(new URL("./telem-plus.js", import.meta.url), out);
 console.log(`telem-plus.js ${version}: ${(out.length / 1024).toFixed(1)} KB`);
+
+// Firefox (desktop + Android) manifest. Orion on iPhone installs the same add-on from addons.mozilla.org.
+const manifest = JSON.parse(readFileSync(new URL("./extension/manifest.json", import.meta.url), "utf8"));
+manifest.host_permissions = ["https://telem.tel-aviv.gov.il/*"];
+manifest.browser_specific_settings = {
+  gecko: {
+    id: "telem-plus@iftachts.github.io",
+    strict_min_version: "140.0",
+    data_collection_permissions: { required: ["none"] },
+  },
+  gecko_android: { strict_min_version: "142.0" },
+};
+writeFileSync(new URL("./firefox-manifest.json", import.meta.url), JSON.stringify(manifest, null, 2) + "\n");
+console.log("firefox-manifest.json written (package with: ./package.sh)");

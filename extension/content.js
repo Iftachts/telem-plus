@@ -47,6 +47,11 @@
     link: svg('<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>'),
   };
 
+  // Markup here is our own static templates (user text goes through esc()); parse it
+  // with DOMParser instead of assigning innerHTML.
+  const parser = new DOMParser();
+  const setHTML = (node, html) => node.replaceChildren(...parser.parseFromString(html, "text/html").body.childNodes);
+
   /* ---------------- settings → classes ---------------- */
   const mq = window.matchMedia("(prefers-color-scheme: dark)");
   const isDark = () => settings.theme === "dark" || (settings.theme === "auto" && mq.matches);
@@ -57,7 +62,7 @@
     root.classList.toggle("tg-calm", !!settings.calm);
     root.dataset.tgAccent = settings.accent || "sea";
     const t = document.getElementById("tg-theme");
-    if (t) t.innerHTML = isDark() ? IC.sun : IC.moon;
+    if (t) setHTML(t, isDark() ? IC.sun : IC.moon);
     if (!settings.enabled) cleanup();
   }
   function onSettings(next) { settings = { ...DEFAULTS, ...next }; applySettings(); schedule(); }
@@ -91,7 +96,7 @@
   const el = (tag, attrs = {}, html = "") => {
     const e = document.createElement(tag);
     for (const [k, v] of Object.entries(attrs)) k === "class" ? (e.className = v) : e.setAttribute(k, v);
-    if (html) e.innerHTML = html;
+    if (html) setHTML(e, html);
     return e;
   };
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -175,7 +180,7 @@
         c.style.cssText = `left:${x}%;top:${y}%;--r:${r}deg;animation-delay:${-i * 1.3}s;opacity:${0.35 + (i % 3) * 0.2}`;
         confetti.appendChild(c);
       });
-      hero.innerHTML = `<div class="tg-eyebrow"></div><h1></h1><div class="tg-sub"></div>`;
+      setHTML(hero, `<div class="tg-eyebrow"></div><h1></h1><div class="tg-sub"></div>`);
       const cta = el("button", { class: "tg-hero-cta", type: "button" }, `${IC.plus}<span>דיווח התערבות חדש</span>`);
       cta.addEventListener("click", () => go("/protocol"));
       hero.append(confetti, cta);
@@ -251,7 +256,7 @@
       }
       const pct = done / req.length;
       $(".fg", p).setAttribute("stroke-dashoffset", String(100.5 * (1 - pct)));
-      $("span", p).innerHTML = pct >= 1 ? "<strong>הכול מוכן</strong> · אפשר לשמור" : `שדות חובה: <strong>${done}/${req.length}</strong>`;
+      setHTML($("span", p), pct >= 1 ? "<strong>הכול מוכן</strong> · אפשר לשמור" : `שדות חובה: <strong>${done}/${req.length}</strong>`);
       p.classList.toggle("tg-done", pct >= 1);
     }
 
@@ -343,13 +348,13 @@
     const q = $("input", p).value.trim().toLowerCase();
     palItems = buildPaletteItems().filter((i) => !q || (i.label + " " + (i.keys || "")).toLowerCase().includes(q));
     const ul = $("ul", p);
-    if (!palItems.length) { ul.innerHTML = `<div class="tg-empty">לא נמצא כלום עבור "${esc(q)}"</div>`; return; }
+    if (!palItems.length) { setHTML(ul, `<div class="tg-empty">לא נמצא כלום עבור "${esc(q)}"</div>`); return; }
     let html = "", last = "";
     palItems.forEach((it, i) => {
       if (it.group !== last) { html += `<div class="tg-group">${esc(it.group)}</div>`; last = it.group; }
       html += `<li class="tg-item${i === palIndex ? " tg-active" : ""}" data-i="${i}"><span class="tg-ic">${it.icon}</span><span>${esc(it.label)}</span>${it.hint ? `<span class="tg-hint">${esc(it.hint)}</span>` : ""}</li>`;
     });
-    ul.innerHTML = html;
+    setHTML(ul, html);
     $$("li.tg-item", ul).forEach((li) => {
       li.addEventListener("mouseenter", () => { palIndex = +li.dataset.i; $$("li.tg-item", ul).forEach((x) => x.classList.toggle("tg-active", x === li)); });
       li.addEventListener("click", () => palItems[+li.dataset.i]?.run());
