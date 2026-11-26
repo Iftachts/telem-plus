@@ -514,7 +514,7 @@ html.tg-on tlv-eps-protocol form { background: transparent !important; display: 
 
 html.tg-on tlv-eps-protocol form > div {
   display: grid !important;
-  grid-template-columns: 1.15fr 1fr;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
   gap: 18px;
   padding: 0 !important; margin: 0 !important;
   background: transparent !important;
@@ -561,7 +561,7 @@ html.tg-on tlv-eps-protocol form > div > .div-details:nth-child(1) { grid-column
 html.tg-on tlv-eps-protocol form > div > .button-toggle-div:nth-child(2) { grid-column: 2; grid-row: 1; padding-bottom: 8px !important; border-end-start-radius: 0 !important; border-end-end-radius: 0 !important; border-bottom: 0 !important; }
 html.tg-on tlv-eps-protocol form > div > .button-toggle-div:nth-child(3) { grid-column: 2; grid-row: 2; padding-top: 8px !important; margin-top: -18px !important; border-start-start-radius: 0 !important; border-start-end-radius: 0 !important; border-top: 0 !important; }
 @media (max-width: 860px) {
-  html.tg-on tlv-eps-protocol form > div { grid-template-columns: 1fr; }
+  html.tg-on tlv-eps-protocol form > div { grid-template-columns: minmax(0, 1fr) !important; }
   html.tg-on tlv-eps-protocol form > div > * { grid-column: 1 !important; grid-row: auto !important; }
 }
 
@@ -1023,6 +1023,9 @@ html.tg-on { -webkit-tap-highlight-color: transparent; }
 
   /* form */
   html.tg-on tlv-eps-protocol form > div { gap: 12px; }
+  html.tg-on tlv-eps-protocol form > div > * { min-width: 0 !important; max-width: 100% !important; }
+  html.tg-on tlv-eps-protocol :is(mat-form-field, tlv-autocomplete, tlv-file, .w-100, .w-50, .w-40, .time-div, .file-div, .referral-option-field) { max-width: 100% !important; min-width: 0 !important; box-sizing: border-box; }
+  html.tg-on tlv-eps-protocol .div-details:nth-child(1) { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important; }
   html.tg-on tlv-eps-protocol form > div > :is(.div-details, .button-toggle-div, .p-div) { padding: 48px 14px 14px !important; border-radius: 18px !important; }
   html.tg-on tlv-eps-protocol form > div > :is(.div-details, .p-div)::before,
   html.tg-on tlv-eps-protocol form > div > .button-toggle-div:nth-child(2)::before { top: 16px; inset-inline-start: 16px; font-size: 15px; }
